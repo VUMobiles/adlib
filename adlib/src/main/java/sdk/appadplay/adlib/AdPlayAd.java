@@ -36,9 +36,7 @@ public class AdPlayAd {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-
                 getSimSlot();
-
                 String UserAgent = (new WebView(mContext)).getSettings().getUserAgentString();
                 String userAgent = UserAgent.replaceAll(" ", "%20");
                 String gID = getDeviceID();
@@ -48,7 +46,7 @@ public class AdPlayAd {
 
                 new BackgroundTask().execute(url,"1");
             }
-        }, 1000);
+        }, 5000);
 
     }
 
