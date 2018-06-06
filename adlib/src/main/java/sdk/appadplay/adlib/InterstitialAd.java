@@ -181,6 +181,7 @@ public class InterstitialAd extends Activity {
                 finish();
                 mWebView.destroy();
                 adLayout.setVisibility(View.GONE);
+                finish();
             }
         });
     }
