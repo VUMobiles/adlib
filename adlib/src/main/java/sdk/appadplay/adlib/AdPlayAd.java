@@ -286,7 +286,7 @@ public class AdPlayAd {
         videoview.setId(4);
         videoview.setClickable(true);
 
-        final RelativeLayout.LayoutParams videoParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 250);
+        final RelativeLayout.LayoutParams videoParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         videoParams.addRule(RelativeLayout.CENTER_VERTICAL);
         videoParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
 
