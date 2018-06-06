@@ -381,7 +381,7 @@ public class AdPlayAd {
                 adLayout.setVisibility(View.GONE);
                 try {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(nurl));
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                 } catch (ActivityNotFoundException e) {
                     e.printStackTrace();
