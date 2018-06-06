@@ -167,9 +167,12 @@ public class AdPlayAd {
 
     //==============================Video Ad==================================//
 
-    public void loadVideoAd(final String myPublisherId,VideoAdCallBack v) {
+    public void loadVideoAd(final String myPublisherId,VideoAdCallBack startVideo,VideoAdCallBack stopVideo, VideoAdCallBack skipAd) {
 
-        videoAdCallBack = v;
+        videoAdCallBackStart = startVideo;
+        videoAdCallBackStop = stopVideo;
+        videoAdcallBackSkipAd = skipAd;
+
 
         String UserAgent = (new WebView(mContext)).getSettings().getUserAgentString();
         String userAgent = UserAgent.replaceAll(" ", "%20");
@@ -325,7 +328,9 @@ public class AdPlayAd {
                 videoview.requestFocus();
                 videoview.start();
                 videoview.pause();
-
+                if (videoAdCallBackStart!=null){
+                    videoAdCallBackStart.isPlayingVideoAD(true);
+                }
                 videoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                     @Override
                     public void onPrepared(MediaPlayer mediaPlayer) {
@@ -334,12 +339,8 @@ public class AdPlayAd {
                             videoview.start();
                             Log.d("VideoAd","Start");
                             if (videoview.isPlaying()){
-                                if (videoAdCallBack!=null){
-                                    videoAdCallBack.isPlayingVideoAD(true);
-                                }
                                 Log.d("VideoAd","Playing");
                                 new CountDownTimer(5000, 1000) {
-
                                     public void onTick(long millisUntilFinished) {
                                         double remian = millisUntilFinished / 1000;
                                         int remainTime = (int) remian;
@@ -396,6 +397,9 @@ public class AdPlayAd {
                 if (videoview.isPlaying()) {
                     videoview.stopPlayback();
                     adLayout.setVisibility(View.GONE);
+                    if (videoAdcallBackSkipAd!=null){
+                        videoAdcallBackSkipAd.skipVideoAd(true);
+                    }
                 }
             }
         });
@@ -405,13 +409,18 @@ public class AdPlayAd {
             public void onCompletion(MediaPlayer mediaPlayer) {
                 adLayout.setVisibility(View.GONE);
                 Log.d("VideoAd","Finish");
+                if (videoAdCallBackStart!=null){
+                    videoAdCallBackStart.finishVideoAd(true);
+                }
             }
         });
     }
-    VideoAdCallBack videoAdCallBack;
+    VideoAdCallBack videoAdCallBackStart, videoAdCallBackStop, videoAdcallBackSkipAd;
 
     public interface VideoAdCallBack{
         public void isPlayingVideoAD(boolean isPlaying);
+        public void finishVideoAd(boolean finishAd);
+        public void skipVideoAd(boolean skipAd);
     }
 
     //*******************************END of video ad Method*****************************//
