@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="sdk.appadplay.adlib">
 
-    <application>
+    <application
+        android:allowBackup="true"
+        android:supportsRtl="true">
         <activity
             android:name=".InterstitialAd"
             android:theme="@android:style/Theme.NoTitleBar" />

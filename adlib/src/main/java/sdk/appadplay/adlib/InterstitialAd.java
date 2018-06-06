@@ -1,13 +1,13 @@
 package sdk.appadplay.adlib;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -21,7 +21,7 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
-public class InterstitialAd extends AppCompatActivity {
+public class InterstitialAd extends Activity {
 
     public static String myPublisherId;
     WebView mWebView;
