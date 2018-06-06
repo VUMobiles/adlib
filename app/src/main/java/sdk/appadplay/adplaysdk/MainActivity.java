@@ -18,6 +18,6 @@ public class MainActivity extends AppCompatActivity {
 
         adView = findViewById(R.id.rl);
 
-        new AdPlayAd(this, adView).loadVideoAd(myPublisherId, "sdk.appadplay.adplaysdk","video");
+        new AdPlayAd(this, adView).loadVideoAd(myPublisherId);
     }
 }

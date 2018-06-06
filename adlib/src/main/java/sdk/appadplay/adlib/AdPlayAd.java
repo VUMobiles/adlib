@@ -283,7 +283,7 @@ public class AdPlayAd {
         videoview.setId(4);
         videoview.setClickable(true);
 
-        final RelativeLayout.LayoutParams videoParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        final RelativeLayout.LayoutParams videoParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         videoParams.addRule(RelativeLayout.CENTER_VERTICAL);
         videoParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
 
@@ -297,7 +297,7 @@ public class AdPlayAd {
         final RelativeLayout.LayoutParams txtParams = new RelativeLayout.LayoutParams(25,25);
         txtParams.addRule(RelativeLayout.BELOW,videoview.getId());
         txtParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        txtParams.setMargins(0, 0, 10,5);
+        txtParams.setMargins(0, 0, 10,10);
 
         final RelativeLayout.LayoutParams btnCloseParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         btnCloseParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
@@ -333,7 +333,7 @@ public class AdPlayAd {
                             Log.d("VideoAd","Start");
                             if (videoview.isPlaying()){
                                 Log.d("VideoAd","Playing");
-                                new CountDownTimer(15000, 1000) {
+                                new CountDownTimer(5000, 1000) {
 
                                     public void onTick(long millisUntilFinished) {
                                         double remian = millisUntilFinished / 1000;
