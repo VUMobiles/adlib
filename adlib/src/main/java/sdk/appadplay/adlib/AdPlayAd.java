@@ -167,11 +167,9 @@ public class AdPlayAd {
 
     //==============================Video Ad==================================//
 
-    public void loadVideoAd(final String myPublisherId,VideoAdCallBack startVideo,VideoAdCallBack stopVideo, VideoAdCallBack skipAd) {
+    public void loadVideoAd(final String myPublisherId,VideoAdCallBack videoAdCallBack) {
 
-        videoAdCallBackStart = startVideo;
-        videoAdCallBackStop = stopVideo;
-        videoAdcallBackSkipAd = skipAd;
+        this.videoAdCallBackStart = videoAdCallBack;
 
 
         String UserAgent = (new WebView(mContext)).getSettings().getUserAgentString();
