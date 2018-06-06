@@ -410,7 +410,7 @@ public class AdPlayAd {
     }
     VideoAdCallBack videoAdCallBack;
 
-    interface VideoAdCallBack{
+    public interface VideoAdCallBack{
         public void isPlayingVideoAD(boolean isPlaying);
     }
 
