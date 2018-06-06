@@ -330,6 +330,7 @@ public class AdPlayAd {
                         try{
                             Log.d("VideoAd","Prepare");
                             videoview.start();
+                            startVideo("1");
                             Log.d("VideoAd","Start");
                             if (videoview.isPlaying()){
                                 Log.d("VideoAd","Playing");
@@ -404,5 +405,10 @@ public class AdPlayAd {
         });
     }
 
-    //*******************************END of interstitial ad Method*****************************//
+
+    public String startVideo(String s) {
+        return s;
+    }
+
+    //*******************************END of video ad Method*****************************//
 }
