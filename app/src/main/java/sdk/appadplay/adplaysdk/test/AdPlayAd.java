@@ -1,4 +1,4 @@
-package sdk.appadplay.adlib;
+package sdk.appadplay.adplaysdk.test;
 
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
@@ -23,6 +23,7 @@ import android.widget.VideoView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import sdk.appadplay.adlib.TelephonyInfo;
 import sdk.appadplay.adlib.network.HttpHandler;
 
 /**
@@ -403,8 +404,8 @@ public class AdPlayAd {
                     videoview.stopPlayback();
                     adLayout.setVisibility(View.GONE);
                     handler.removeCallbacks(myRunnable);
-                    if (videoAdCallBackStart!=null){
-                        videoAdCallBackStart.skipVideoAd(true);
+                    if (videoAdcallBackSkipAd!=null){
+                        videoAdcallBackSkipAd.skipVideoAd(true);
                     }
                 }
             }
@@ -422,7 +423,7 @@ public class AdPlayAd {
             }
         });
     }
-    VideoAdCallBack videoAdCallBackStart;
+    VideoAdCallBack videoAdCallBackStart, videoAdCallBackStop, videoAdcallBackSkipAd;
 
     public interface VideoAdCallBack{
         public void isPlayingVideoAD(boolean isPlaying);

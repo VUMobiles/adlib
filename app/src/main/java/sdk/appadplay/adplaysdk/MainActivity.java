@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.RelativeLayout;
 
-import sdk.appadplay.adlib.AdPlayAd;
+import sdk.appadplay.adplaysdk.test.AdPlayAd;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +18,21 @@ public class MainActivity extends AppCompatActivity {
 
         adView = findViewById(R.id.rl);
 
-        new AdPlayAd(this,adView).loadVideoAd(myPublisherId,new Vide);
+        new AdPlayAd(this, adView).loadVideoAd(myPublisherId, new AdPlayAd.VideoAdCallBack() {
+            @Override
+            public void isPlayingVideoAD(boolean isPlaying) {
+
+            }
+
+            @Override
+            public void finishVideoAd(boolean finishAd) {
+
+            }
+
+            @Override
+            public void skipVideoAd(boolean skipAd) {
+
+            }
+        });
     }
 }
