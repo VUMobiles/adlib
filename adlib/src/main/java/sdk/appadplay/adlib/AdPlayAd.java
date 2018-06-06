@@ -167,7 +167,9 @@ public class AdPlayAd {
 
     //==============================Video Ad==================================//
 
-    public void loadVideoAd(final String myPublisherId) {
+    public void loadVideoAd(final String myPublisherId,VideoAdCallBack v) {
+
+        videoAdCallBack = v;
 
         String UserAgent = (new WebView(mContext)).getSettings().getUserAgentString();
         String userAgent = UserAgent.replaceAll(" ", "%20");
@@ -330,9 +332,11 @@ public class AdPlayAd {
                         try{
                             Log.d("VideoAd","Prepare");
                             videoview.start();
-                            startVideo();
                             Log.d("VideoAd","Start");
                             if (videoview.isPlaying()){
+                                if (videoAdCallBack!=null){
+                                    videoAdCallBack.isPlayingVideoAD(true);
+                                }
                                 Log.d("VideoAd","Playing");
                                 new CountDownTimer(5000, 1000) {
 
@@ -404,10 +408,10 @@ public class AdPlayAd {
             }
         });
     }
+    VideoAdCallBack videoAdCallBack;
 
-
-    public String startVideo() {
-        return "1";
+    interface VideoAdCallBack{
+        public void isPlayingVideoAD(boolean isPlaying);
     }
 
     //*******************************END of video ad Method*****************************//

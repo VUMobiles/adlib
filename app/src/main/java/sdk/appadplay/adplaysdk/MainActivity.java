@@ -2,6 +2,7 @@ package sdk.appadplay.adplaysdk;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.RelativeLayout;
 
 import sdk.appadplay.adlib.AdPlayAd;
@@ -19,6 +20,6 @@ public class MainActivity extends AppCompatActivity {
         adView = findViewById(R.id.rl);
 
         new AdPlayAd(this, adView).loadVideoAd(myPublisherId);
-        
+        Log.d("ResponseVideo",new AdPlayAd(this, adView).startVideo());
     }
 }
