@@ -19,5 +19,6 @@ public class MainActivity extends AppCompatActivity {
         adView = findViewById(R.id.rl);
 
         new AdPlayAd(this, adView).loadVideoAd(myPublisherId);
+        
     }
 }

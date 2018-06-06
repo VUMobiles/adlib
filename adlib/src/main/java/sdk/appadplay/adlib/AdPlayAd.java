@@ -330,7 +330,7 @@ public class AdPlayAd {
                         try{
                             Log.d("VideoAd","Prepare");
                             videoview.start();
-                            startVideo("1");
+                            startVideo();
                             Log.d("VideoAd","Start");
                             if (videoview.isPlaying()){
                                 Log.d("VideoAd","Playing");
@@ -406,8 +406,8 @@ public class AdPlayAd {
     }
 
 
-    public String startVideo(String s) {
-        return s;
+    public String startVideo() {
+        return "1";
     }
 
     //*******************************END of video ad Method*****************************//
