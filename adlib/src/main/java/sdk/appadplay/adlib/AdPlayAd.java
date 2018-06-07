@@ -326,7 +326,7 @@ public class AdPlayAd {
                 adLayout.setBackgroundColor(Color.BLACK);
                 btnClose.setVisibility(View.GONE);
 
-                videoview.requestFocus();
+                //videoview.requestFocus();
 
                 if (videoAdCallBackStart!=null){
                     videoAdCallBackStart.isPlayingVideoAD(true);
