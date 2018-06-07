@@ -273,7 +273,7 @@ public class AdPlayAd {
         adLayout.setVisibility(View.GONE);
 
         final RelativeLayout subLayout = new RelativeLayout(context);
-        final RelativeLayout.LayoutParams subLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        final RelativeLayout.LayoutParams subLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
         final TextView txtTimeRemain = new TextView(context);
         txtTimeRemain.setTextColor(Color.WHITE);

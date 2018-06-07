@@ -286,21 +286,27 @@ public class AdPlayAd {
         videoview = new VideoView(context);
         videoview.setId(4);
         videoview.setClickable(true);
+        videoview.setZOrderOnTop(true);
 
         final RelativeLayout.LayoutParams videoParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 250);
         videoParams.addRule(RelativeLayout.CENTER_VERTICAL);
         videoParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        videoParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        videoParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        videoParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 
 
         final Button btnClose = new Button(context);
         btnClose.setText("SKIP AD");
-        btnClose.setTextColor(Color.WHITE);
+        btnClose.setTextColor(Color.BLACK);
         btnClose.setBackgroundResource(Color.parseColor("#00000000"));
         btnClose.setId(2);
 
         final RelativeLayout.LayoutParams txtParams = new RelativeLayout.LayoutParams(25,25);
-        txtParams.addRule(RelativeLayout.BELOW,videoview.getId());
+        txtParams.addRule(RelativeLayout.ABOVE,videoview.getId());
         txtParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        txtParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         txtParams.setMargins(0, 0, 10,10);
 
         final RelativeLayout.LayoutParams btnCloseParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -364,9 +370,9 @@ public class AdPlayAd {
         };
         handler.postDelayed(myRunnable, afterPlay * 1000);
 
+        subLayout.addView(videoview, videoParams);
         subLayout.addView(txtTimeRemain,txtParams);
         subLayout.addView(btnClose, btnCloseParams);
-        subLayout.addView(videoview, videoParams);
         adLayout.addView(subLayout, subLayoutParams);
 
 
@@ -404,6 +410,7 @@ public class AdPlayAd {
                     videoview.stopPlayback();
                     adLayout.setVisibility(View.GONE);
                     handler.removeCallbacks(myRunnable);
+                    videoview.setVisibility(View.GONE);
                     if (videoAdcallBackSkipAd!=null){
                         videoAdcallBackSkipAd.skipVideoAd(true);
                     }
