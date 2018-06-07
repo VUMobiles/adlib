@@ -288,6 +288,7 @@ public class AdPlayAd {
         videoview.requestFocus();
         videoview.setZOrderOnTop(true);
 
+
         final RelativeLayout.LayoutParams videoParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         videoParams.addRule(RelativeLayout.CENTER_VERTICAL);
         videoParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
@@ -381,6 +382,7 @@ public class AdPlayAd {
                     videoview.stopPlayback();
                     adLayout.setVisibility(View.GONE);
                     videoview = null;
+                    videoview.setVisibility(View.GONE);
                 }catch (NullPointerException e){
                     e.printStackTrace();
                 }
@@ -403,6 +405,7 @@ public class AdPlayAd {
             public void onClick(View view) {
                 if (videoview.isPlaying()) {
                     videoview.stopPlayback();
+                    videoview.setVisibility(View.GONE);
                     adLayout.setVisibility(View.GONE);
                     handler.removeCallbacks(myRunnable);
                     if (videoAdCallBackStart!=null){
@@ -416,6 +419,7 @@ public class AdPlayAd {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
                 adLayout.setVisibility(View.GONE);
+                videoview.setVisibility(View.GONE);
                 Log.d("VideoAd","Finish");
                 handler.removeCallbacks(myRunnable);
                 if (videoAdCallBackStart!=null){
