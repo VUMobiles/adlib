@@ -170,7 +170,7 @@ public class AdPlayAd {
 
     //==============================Video Ad==================================//
 
-    public void loadVideoAd(final String myPublisherId,VideoAdCallBack videoAdCallBack, String adType) {
+    public void loadVideoAd(final String myPublisherId,VideoAdCallBack videoAdCallBack) {
 
         this.videoAdCallBackStart = videoAdCallBack;
 

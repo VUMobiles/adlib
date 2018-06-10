@@ -35,10 +35,18 @@ public class AdPlayAd {
     private RelativeLayout adLayout;
     private WebView mWebView;
     static VideoView videoview;
+    private int mHeight;
 
-    public AdPlayAd(Context context, RelativeLayout layout) {
+//    public AdPlayAd(Context context, RelativeLayout layout) {
+//        this.mContext = context;
+//        this.adLayout = layout;
+//    }
+
+    public AdPlayAd(Context context, RelativeLayout layout, int height) {
         this.mContext = context;
         this.adLayout = layout;
+        this.mHeight = height;
+
     }
 
     //==============================Interstitial Ad==================================//
@@ -258,13 +266,182 @@ public class AdPlayAd {
                 String repeat = objVideo.getString("repeat");
 
                 if (!nurl.equals(null) || !nurl.isEmpty() ) {
-                    playVideo(mContext, nurl, videoUrl, playMin, adLayout,adRole,repeat);
+                    if (adRole.equalsIgnoreCase("1")){
+                        playPreRoleVideoAd(mContext, nurl, videoUrl, playMin, adLayout,adRole,repeat);
+                    }else {
+                        playVideo(mContext, nurl, videoUrl, playMin, adLayout,adRole,repeat);
+                    }
                 }
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    @SuppressLint({"ResourceType", "ClickableViewAccessibility"})
+    private void playPreRoleVideoAd(final Context context, final String nurl, final String videoUrl, String playMin, final RelativeLayout adLayout, final String adRole, final String repeat) {
+
+        adLayout.setVisibility(View.GONE);
+
+        final RelativeLayout subLayout = new RelativeLayout(context);
+        subLayout.setClickable(true);
+        final RelativeLayout.LayoutParams subLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, mHeight);
+
+        final TextView txtTimeRemain = new TextView(context);
+        txtTimeRemain.setTextColor(Color.WHITE);
+        txtTimeRemain.setId(3);
+
+        int time;
+        int afterPlay = Integer.parseInt(playMin);
+
+        videoview = new VideoView(context);
+        videoview.setId(4);
+        videoview.setClickable(true);
+        videoview.setZOrderOnTop(true);
+
+        final RelativeLayout.LayoutParams videoParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 250);
+        videoParams.addRule(RelativeLayout.CENTER_VERTICAL);
+        videoParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        videoParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        videoParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+
+
+        final Button btnClose = new Button(context);
+        btnClose.setText("SKIP AD");
+        btnClose.setTextColor(Color.WHITE);
+        btnClose.setBackgroundResource(Color.parseColor("#00000000"));
+        btnClose.setId(2);
+
+        final RelativeLayout.LayoutParams txtParams = new RelativeLayout.LayoutParams(25,25);
+//        txtParams.addRule(RelativeLayout.ABOVE,videoview.getId());
+        txtParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+//        txtParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+//        txtParams.setMargins(0, 0, 10,10);
+
+        final RelativeLayout.LayoutParams btnCloseParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        btnCloseParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+
+
+        if (adRole.equals("2")){
+            // video ad will play after 15 sec
+            time = 15000;
+        }else {
+            // video ad will play after 1 sec
+            time = 1000;
+        }
+        videoview.setVideoURI(Uri.parse(videoUrl));
+
+        final Handler handler = new Handler();
+        final Runnable myRunnable = new Runnable() {
+            @Override
+            public void run() {
+                adLayout.setVisibility(View.VISIBLE);
+                adLayout.setBackgroundColor(Color.BLACK);
+                btnClose.setVisibility(View.GONE);
+
+                videoview.requestFocus();
+
+                if (videoAdCallBackStart!=null){
+                    videoAdCallBackStart.isPlayingVideoAD(true);
+                }
+                videoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mediaPlayer) {
+                        try{
+                            Log.d("VideoAd","Prepare");
+                            videoview.start();
+                            Log.d("VideoAd","Start");
+                            if (videoview.isPlaying()){
+                                Log.d("VideoAd","Playing");
+                                new CountDownTimer(5000, 1000) {
+                                    public void onTick(long millisUntilFinished) {
+                                        double remian = millisUntilFinished / 1000;
+                                        int remainTime = (int) remian;
+                                        String s = String.valueOf(remainTime);
+                                        txtTimeRemain.setText(s);
+                                        Log.d("RemainTime",s);
+                                    }
+
+                                    public void onFinish() {
+                                        btnClose.setVisibility(View.VISIBLE);
+                                        txtTimeRemain.setVisibility(View.GONE);
+                                    }
+
+                                }.start();
+
+                            }
+                        }catch (NullPointerException e){
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        };
+        handler.postDelayed(myRunnable, afterPlay * 1000);
+
+        subLayout.addView(videoview, videoParams);
+        subLayout.addView(txtTimeRemain,txtParams);
+        subLayout.addView(btnClose, btnCloseParams);
+        adLayout.addView(subLayout, subLayoutParams);
+
+
+        videoview.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                Log.d("vclick", "click");
+
+                try{
+                    videoview.pause();
+                    videoview.stopPlayback();
+                    adLayout.setVisibility(View.GONE);
+                    videoview = null;
+                }catch (NullPointerException e){
+                    e.printStackTrace();
+                }
+
+                try {
+                    handler.removeCallbacks(myRunnable);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(nurl));
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                } catch (ActivityNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                return false;
+            }
+        });
+
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (videoview.isPlaying()) {
+                    videoview.stopPlayback();
+                    adLayout.setVisibility(View.GONE);
+                    handler.removeCallbacks(myRunnable);
+                    videoview.setVisibility(View.GONE);
+                    if (videoAdCallBackStart!=null){
+                        videoAdCallBackStart.skipVideoAd(true);
+                    }
+                }
+            }
+        });
+
+        videoview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                adLayout.setVisibility(View.GONE);
+                videoview.setVisibility(View.GONE);
+                Log.d("VideoAd","Finish");
+                handler.removeCallbacks(myRunnable);
+                if (videoAdCallBackStart!=null){
+                    videoAdCallBackStart.finishVideoAd(true);
+                }
+            }
+        });
+
     }
 
     @SuppressLint({"ResourceType", "ClickableViewAccessibility"})
