@@ -36,6 +36,8 @@ public class AdPlayAd {
     private RelativeLayout adLayout;
     private WebView mWebView;
     static VideoView videoview;
+    public static final String PRE_ROLE_VIDEO = "1";
+    public static final String FULL_SCREEN = "2";
 
     public AdPlayAd(Context context, RelativeLayout layout) {
         this.mContext = context;
@@ -168,7 +170,7 @@ public class AdPlayAd {
 
     //==============================Video Ad==================================//
 
-    public void loadVideoAd(final String myPublisherId,VideoAdCallBack videoAdCallBack) {
+    public void loadVideoAd(final String myPublisherId,VideoAdCallBack videoAdCallBack, String adType) {
 
         this.videoAdCallBackStart = videoAdCallBack;
 
@@ -274,7 +276,8 @@ public class AdPlayAd {
         adLayout.setVisibility(View.GONE);
 
         final RelativeLayout subLayout = new RelativeLayout(context);
-        final RelativeLayout.LayoutParams subLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        subLayout.setClickable(true);
+        final RelativeLayout.LayoutParams subLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 300);
 
         final TextView txtTimeRemain = new TextView(context);
         txtTimeRemain.setTextColor(Color.WHITE);
@@ -291,7 +294,6 @@ public class AdPlayAd {
         final RelativeLayout.LayoutParams videoParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 250);
         videoParams.addRule(RelativeLayout.CENTER_VERTICAL);
         videoParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        videoParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         videoParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         videoParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
@@ -299,15 +301,15 @@ public class AdPlayAd {
 
         final Button btnClose = new Button(context);
         btnClose.setText("SKIP AD");
-        btnClose.setTextColor(Color.BLACK);
+        btnClose.setTextColor(Color.WHITE);
         btnClose.setBackgroundResource(Color.parseColor("#00000000"));
         btnClose.setId(2);
 
         final RelativeLayout.LayoutParams txtParams = new RelativeLayout.LayoutParams(25,25);
-        txtParams.addRule(RelativeLayout.ABOVE,videoview.getId());
+//        txtParams.addRule(RelativeLayout.ABOVE,videoview.getId());
         txtParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        txtParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        txtParams.setMargins(0, 0, 10,10);
+//        txtParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+//        txtParams.setMargins(0, 0, 10,10);
 
         final RelativeLayout.LayoutParams btnCloseParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         btnCloseParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
@@ -422,6 +424,7 @@ public class AdPlayAd {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
                 adLayout.setVisibility(View.GONE);
+                videoview.setVisibility(View.GONE);
                 Log.d("VideoAd","Finish");
                 handler.removeCallbacks(myRunnable);
                 if (videoAdCallBackStart!=null){
