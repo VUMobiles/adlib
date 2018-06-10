@@ -46,7 +46,7 @@ public class AdPlayAd {
 
     //==============================Interstitial Ad==================================//
 
-    public void loadInterstitial(final String publisherID, final String packageName, final String requestType){
+    public void loadInterstitial(final String publisherID, final String packageName, final String requestType) {
 
         adLayout.setVisibility(View.GONE);
         new Handler().postDelayed(new Runnable() {
@@ -56,17 +56,18 @@ public class AdPlayAd {
                 String UserAgent = (new WebView(mContext)).getSettings().getUserAgentString();
                 String userAgent = UserAgent.replaceAll(" ", "%20");
                 String gID = getDeviceID();
-                Log.d("DeviceId",gID);
-                String url = "https://adsapi.adplay-mobile.com/adplaysdk?pid="+publisherID+"&useragent="+userAgent+"&type="+requestType+"&dimension=&gid="+gID+"&packagename="+packageName+"&request=interstitial";
-                Log.d("ParentURL",url);
+                Log.d("DeviceId", gID);
+                String url = "https://adsapi.adplay-mobile.com/adplaysdk?pid=" + publisherID + "&useragent=" + userAgent + "&type=" + requestType + "&dimension=&gid=" + gID + "&packagename=" + packageName + "&request=interstitial";
+                Log.d("ParentURL", url);
 
-                new BackgroundTask().execute(url,"1");
+                new BackgroundTask().execute(url, "1");
             }
         }, 5000);
 
     }
 
-    String url,type;
+    String url, type;
+
     private class BackgroundTask extends AsyncTask<String, Void, String> {
 
         @Override
@@ -84,33 +85,33 @@ public class AdPlayAd {
         @Override
         protected void onPostExecute(String result) {
 
-            if (result.isEmpty()){
+            if (result.isEmpty()) {
                 return;
             }
             try {
                 JSONObject obj = new JSONObject(result);
-                Log.d("Object","obj1:-----"+String.valueOf(obj));
+                Log.d("Object", "obj1:-----" + String.valueOf(obj));
                 JSONObject obj2 = obj.getJSONObject("seatbid");
                 JSONObject obj3 = obj2.getJSONObject("bid");
 
                 String dimen = obj.getString("dim");
-                Log.d("ParseData","Dim:"+dimen);
+                Log.d("ParseData", "Dim:" + dimen);
                 String clickUrl = obj3.getString("nurl");
-                Log.d("ParseData","DestinationUrl:"+clickUrl);
+                Log.d("ParseData", "DestinationUrl:" + clickUrl);
                 String adUrl = obj3.getString("iurl");
-                Log.d("ParseData","adUrl:"+adUrl);
+                Log.d("ParseData", "adUrl:" + adUrl);
                 String logoUrl = obj3.getString("logo");
-                Log.d("ParseData","logoUrl:"+logoUrl);
+                Log.d("ParseData", "logoUrl:" + logoUrl);
                 String logoClickUrl = obj3.getString("logo_click");
-                Log.d("ParseData","logoClickUrl:"+logoClickUrl);
+                Log.d("ParseData", "logoClickUrl:" + logoClickUrl);
 
-                if (type.equals("2")){
+                if (type.equals("2")) {
                     //loadAd(adUrl, clickUrl, logoUrl, logoClickUrl, dimen);
-                }else if (type.equals("1")){
+                } else if (type.equals("1")) {
                     createInterstitialAd(adUrl, clickUrl, logoUrl, logoClickUrl);
-                }else if (type.equals("3")){
+                } else if (type.equals("3")) {
                     //loadInter(adUrl, clickUrl, logoUrl, logoClickUrl);
-                }else if (type.equals("5")){
+                } else if (type.equals("5")) {
                     //loadAdHtml(adUrl, clickUrl, logoUrl, logoClickUrl, dimen);
                 }
 
@@ -123,14 +124,14 @@ public class AdPlayAd {
     }
 
     private void createInterstitialAd(String adUrl, String clickUrl, String logoUrl, String logoClickUrl) {
-        Log.d("hhhhhhhhhhhhh","lol");
+        Log.d("hhhhhhhhhhhhh", "lol");
         adLayout.setVisibility(View.VISIBLE);
 
         Intent intent = new Intent(mContext, InterstitialAd.class);
-        intent.putExtra("adUrl",adUrl);
-        intent.putExtra("clickUrl",clickUrl);
-        intent.putExtra("logoUrl",logoUrl);
-        intent.putExtra("logoClickUrl",logoClickUrl);
+        intent.putExtra("adUrl", adUrl);
+        intent.putExtra("clickUrl", clickUrl);
+        intent.putExtra("logoUrl", logoUrl);
+        intent.putExtra("logoClickUrl", logoClickUrl);
         mContext.startActivity(intent);
 
 
@@ -138,15 +139,15 @@ public class AdPlayAd {
 
     private String getSimSlot() {
 
-        try{
+        try {
             sdk.appadplay.adlib.TelephonyInfo telephonyInfo = TelephonyInfo.getInstance(mContext);
-            Log.d("SIMSLOT",String.valueOf(telephonyInfo.isDualSIM()));
-            if (telephonyInfo.isDualSIM()){
+            Log.d("SIMSLOT", String.valueOf(telephonyInfo.isDualSIM()));
+            if (telephonyInfo.isDualSIM()) {
                 return "2";
-            }else {
+            } else {
                 return "1";
             }
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             e.printStackTrace();
         }
 
@@ -167,10 +168,9 @@ public class AdPlayAd {
     //*******************************END of interstitial ad Method*****************************//
 
 
-
     //==============================Video Ad==================================//
 
-    public void loadVideoAd(final String myPublisherId,VideoAdCallBack videoAdCallBack) {
+    public void loadVideoAd(final String myPublisherId, VideoAdCallBack videoAdCallBack) {
 
         this.videoAdCallBackStart = videoAdCallBack;
 
@@ -260,8 +260,8 @@ public class AdPlayAd {
                 String adRole = objVideo.getString("role");
                 String repeat = objVideo.getString("repeat");
 
-                if (!nurl.equals(null) || !nurl.isEmpty() ) {
-                    playVideo(mContext, nurl, videoUrl, playMin, adLayout,adRole,repeat);
+                if (!nurl.equals(null) || !nurl.isEmpty()) {
+                    playVideo(mContext, nurl, videoUrl, playMin, adLayout, adRole, repeat);
                 }
 
             } catch (JSONException e) {
@@ -277,6 +277,7 @@ public class AdPlayAd {
 
         final RelativeLayout subLayout = new RelativeLayout(context);
         subLayout.setClickable(true);
+        subLayout.setBackgroundColor(Color.BLACK);
         final RelativeLayout.LayoutParams subLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 300);
 
         final TextView txtTimeRemain = new TextView(context);
@@ -297,6 +298,7 @@ public class AdPlayAd {
         videoParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         videoParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        videoParams.addRule(RelativeLayout.BELOW, txtTimeRemain.getId());
 
 
         final Button btnClose = new Button(context);
@@ -305,9 +307,10 @@ public class AdPlayAd {
         btnClose.setBackgroundResource(Color.parseColor("#00000000"));
         btnClose.setId(2);
 
-        final RelativeLayout.LayoutParams txtParams = new RelativeLayout.LayoutParams(25,25);
+        final RelativeLayout.LayoutParams txtParams = new RelativeLayout.LayoutParams(20, 20);
 //        txtParams.addRule(RelativeLayout.ABOVE,videoview.getId());
         txtParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        txtParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
 //        txtParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 //        txtParams.setMargins(0, 0, 10,10);
 
@@ -315,10 +318,10 @@ public class AdPlayAd {
         btnCloseParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 
 
-        if (adRole.equals("2")){
+        if (adRole.equals("2")) {
             // video ad will play after 15 sec
             time = 15000;
-        }else {
+        } else {
             // video ad will play after 1 sec
             time = 1000;
         }
@@ -334,25 +337,25 @@ public class AdPlayAd {
 
                 videoview.requestFocus();
 
-                if (videoAdCallBackStart!=null){
+                if (videoAdCallBackStart != null) {
                     videoAdCallBackStart.isPlayingVideoAD(true);
                 }
                 videoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                     @Override
                     public void onPrepared(MediaPlayer mediaPlayer) {
-                        try{
-                            Log.d("VideoAd","Prepare");
+                        try {
+                            Log.d("VideoAd", "Prepare");
                             videoview.start();
-                            Log.d("VideoAd","Start");
-                            if (videoview.isPlaying()){
-                                Log.d("VideoAd","Playing");
+                            Log.d("VideoAd", "Start");
+                            if (videoview.isPlaying()) {
+                                Log.d("VideoAd", "Playing");
                                 new CountDownTimer(5000, 1000) {
                                     public void onTick(long millisUntilFinished) {
                                         double remian = millisUntilFinished / 1000;
                                         int remainTime = (int) remian;
                                         String s = String.valueOf(remainTime);
                                         txtTimeRemain.setText(s);
-                                        Log.d("RemainTime",s);
+                                        Log.d("RemainTime", s);
                                     }
 
                                     public void onFinish() {
@@ -363,7 +366,7 @@ public class AdPlayAd {
                                 }.start();
 
                             }
-                        }catch (NullPointerException e){
+                        } catch (NullPointerException e) {
                             e.printStackTrace();
                         }
                     }
@@ -373,7 +376,7 @@ public class AdPlayAd {
         handler.postDelayed(myRunnable, afterPlay * 1000);
 
         subLayout.addView(videoview, videoParams);
-        subLayout.addView(txtTimeRemain,txtParams);
+        subLayout.addView(txtTimeRemain, txtParams);
         subLayout.addView(btnClose, btnCloseParams);
         adLayout.addView(subLayout, subLayoutParams);
 
@@ -383,12 +386,12 @@ public class AdPlayAd {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 Log.d("vclick", "click");
 
-                try{
+                try {
                     videoview.pause();
                     videoview.stopPlayback();
                     adLayout.setVisibility(View.GONE);
                     videoview = null;
-                }catch (NullPointerException e){
+                } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
 
@@ -413,7 +416,7 @@ public class AdPlayAd {
                     adLayout.setVisibility(View.GONE);
                     handler.removeCallbacks(myRunnable);
                     videoview.setVisibility(View.GONE);
-                    if (videoAdcallBackSkipAd!=null){
+                    if (videoAdcallBackSkipAd != null) {
                         videoAdcallBackSkipAd.skipVideoAd(true);
                     }
                 }
@@ -425,19 +428,22 @@ public class AdPlayAd {
             public void onCompletion(MediaPlayer mediaPlayer) {
                 adLayout.setVisibility(View.GONE);
                 videoview.setVisibility(View.GONE);
-                Log.d("VideoAd","Finish");
+                Log.d("VideoAd", "Finish");
                 handler.removeCallbacks(myRunnable);
-                if (videoAdCallBackStart!=null){
+                if (videoAdCallBackStart != null) {
                     videoAdCallBackStart.finishVideoAd(true);
                 }
             }
         });
     }
+
     VideoAdCallBack videoAdCallBackStart, videoAdCallBackStop, videoAdcallBackSkipAd;
 
-    public interface VideoAdCallBack{
+    public interface VideoAdCallBack {
         public void isPlayingVideoAD(boolean isPlaying);
+
         public void finishVideoAd(boolean finishAd);
+
         public void skipVideoAd(boolean skipAd);
     }
 
