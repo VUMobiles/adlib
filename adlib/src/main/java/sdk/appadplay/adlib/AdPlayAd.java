@@ -285,9 +285,8 @@ public class AdPlayAd {
         adLayout.setVisibility(View.GONE);
 
         final RelativeLayout subLayout = new RelativeLayout(context);
-        subLayout.setClickable(true);
         subLayout.setBackgroundColor(Color.BLACK);
-        final RelativeLayout.LayoutParams subLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 300);
+        final RelativeLayout.LayoutParams subLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 320);
 
         final TextView txtTimeRemain = new TextView(context);
         txtTimeRemain.setTextColor(Color.WHITE);
@@ -304,9 +303,6 @@ public class AdPlayAd {
         final RelativeLayout.LayoutParams videoParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 250);
         videoParams.addRule(RelativeLayout.CENTER_VERTICAL);
         videoParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        videoParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        videoParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         videoParams.addRule(RelativeLayout.BELOW, txtTimeRemain.getId());
 
 
