@@ -362,7 +362,7 @@ public class AdPlayAd {
                                         double remian = millisUntilFinished / 1000;
                                         int remainTime = (int) remian;
                                         String s = String.valueOf(remainTime);
-                                        btnClose.setText(s);
+                                        btnClose.setText("Advertisement "+s);
                                         Log.d("RemainTime", s);
                                     }
 
