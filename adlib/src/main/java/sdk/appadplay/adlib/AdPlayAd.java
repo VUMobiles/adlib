@@ -294,6 +294,7 @@ public class AdPlayAd {
         btnClose.setTextColor(Color.WHITE);
         btnClose.setGravity(Gravity.RIGHT);
         btnClose.setTextSize(12);
+        btnClose.setAllCaps(false);
         btnClose.setBackgroundResource(Color.parseColor("#00000000"));
         btnClose.setId(2);
 
