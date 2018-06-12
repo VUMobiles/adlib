@@ -12,6 +12,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebView;
@@ -286,41 +287,42 @@ public class AdPlayAd {
 
         final RelativeLayout subLayout = new RelativeLayout(context);
         subLayout.setBackgroundColor(Color.BLACK);
-        final RelativeLayout.LayoutParams subLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 320);
+        final RelativeLayout.LayoutParams subLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, mHeight);
+
+        final Button btnClose = new Button(context);
+        btnClose.setText("Please wait!");
+        btnClose.setTextColor(Color.WHITE);
+        btnClose.setGravity(Gravity.RIGHT);
+        btnClose.setTextSize(12);
+        btnClose.setBackgroundResource(Color.parseColor("#00000000"));
+        btnClose.setId(2);
+
+        final RelativeLayout.LayoutParams btnCloseParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        btnCloseParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+
 
         final TextView txtTimeRemain = new TextView(context);
         txtTimeRemain.setTextColor(Color.WHITE);
+        btnClose.setBackgroundResource(Color.parseColor("#00000000"));
         txtTimeRemain.setId(3);
+
+        final RelativeLayout.LayoutParams txtParams = new RelativeLayout.LayoutParams(20, 20);
+//        txtParams.addRule(RelativeLayout.ABOVE,videoview.getId());
+        txtParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+//        txtParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 
         int time;
         int afterPlay = Integer.parseInt(playMin);
 
         videoview = new VideoView(context);
         videoview.setId(4);
-        videoview.setClickable(true);
         videoview.setZOrderOnTop(true);
 
-        final RelativeLayout.LayoutParams videoParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 250);
+        final RelativeLayout.LayoutParams videoParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 350);
         videoParams.addRule(RelativeLayout.CENTER_VERTICAL);
         videoParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        videoParams.addRule(RelativeLayout.BELOW, txtTimeRemain.getId());
-
-
-        final Button btnClose = new Button(context);
-        btnClose.setText("SKIP AD");
-        btnClose.setTextColor(Color.WHITE);
-        btnClose.setBackgroundResource(Color.parseColor("#00000000"));
-        btnClose.setId(2);
-
-        final RelativeLayout.LayoutParams txtParams = new RelativeLayout.LayoutParams(20, 20);
-//        txtParams.addRule(RelativeLayout.ABOVE,videoview.getId());
-        txtParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        txtParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-//        txtParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-//        txtParams.setMargins(0, 0, 10,10);
-
-        final RelativeLayout.LayoutParams btnCloseParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        btnCloseParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        videoParams.addRule(RelativeLayout.BELOW, btnClose.getId());
+        videoParams.setMargins(0, 5,  0,0);
 
 
         if (adRole.equals("2")) {
@@ -330,6 +332,7 @@ public class AdPlayAd {
             // video ad will play after 1 sec
             time = 1000;
         }
+        Log.d("VideoAd", videoUrl);
         videoview.setVideoURI(Uri.parse(videoUrl));
 
         final Handler handler = new Handler();
@@ -338,7 +341,7 @@ public class AdPlayAd {
             public void run() {
                 adLayout.setVisibility(View.VISIBLE);
                 adLayout.setBackgroundColor(Color.BLACK);
-                btnClose.setVisibility(View.GONE);
+                btnClose.setVisibility(View.VISIBLE);
 
                 videoview.requestFocus();
 
@@ -359,13 +362,14 @@ public class AdPlayAd {
                                         double remian = millisUntilFinished / 1000;
                                         int remainTime = (int) remian;
                                         String s = String.valueOf(remainTime);
-                                        txtTimeRemain.setText(s);
+                                        btnClose.setText(s);
                                         Log.d("RemainTime", s);
                                     }
 
                                     public void onFinish() {
+                                        btnClose.setText("SKIP AD");
                                         btnClose.setVisibility(View.VISIBLE);
-                                        txtTimeRemain.setVisibility(View.GONE);
+                                        txtTimeRemain.setVisibility(View.INVISIBLE);
                                     }
 
                                 }.start();
