@@ -408,7 +408,7 @@ public class AdPlayAd {
                 try {
                     handler.removeCallbacks(myRunnable);
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(nurl));
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                 } catch (ActivityNotFoundException e) {
                     e.printStackTrace();
