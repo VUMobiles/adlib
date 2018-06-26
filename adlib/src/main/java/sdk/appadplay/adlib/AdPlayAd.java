@@ -340,9 +340,9 @@ public class AdPlayAd {
         final Runnable myRunnable = new Runnable() {
             @Override
             public void run() {
-//                adLayout.setVisibility(View.VISIBLE);
-//                adLayout.setBackgroundColor(Color.BLACK);
-//                btnClose.setVisibility(View.VISIBLE);
+
+                adLayout.setBackgroundColor(Color.BLACK);
+                btnClose.setVisibility(View.VISIBLE);
 
                 videoview.requestFocus();
 
@@ -357,10 +357,8 @@ public class AdPlayAd {
                             videoview.start();
                             Log.d("VideoAd", "Start");
                             if (videoview.isPlaying()) {
-                                Log.d("VideoAd", "Playing");
                                 adLayout.setVisibility(View.VISIBLE);
-                                adLayout.setBackgroundColor(Color.BLACK);
-                                btnClose.setVisibility(View.VISIBLE);
+                                Log.d("VideoAd", "Playing");
                                 new CountDownTimer(5000, 1000) {
                                     public void onTick(long millisUntilFinished) {
                                         double remian = millisUntilFinished / 1000;
