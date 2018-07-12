@@ -268,9 +268,9 @@ public class AdPlayAd {
 
                 if (!nurl.equals(null) || !nurl.isEmpty() ) {
                     if (adRole.equalsIgnoreCase("1")){
-                        playPreRoleVideoAd(mContext, nurl, videoUrl, playMin, adLayout,adRole,repeat,ctaTitle);
+                        playPreRoleVideoAd(mContext, nurl, videoUrl, playMin, adLayout,adRole,repeat);
                     }else {
-                        playVideo(mContext, nurl, videoUrl, playMin, adLayout,adRole,repeat,ctaTitle);
+                        playVideo(mContext, nurl, videoUrl, playMin, adLayout,adRole,repeat);
                     }
                 }
 
@@ -281,7 +281,7 @@ public class AdPlayAd {
     }
 
     @SuppressLint({"ResourceType", "ClickableViewAccessibility"})
-    private void playPreRoleVideoAd(final Context context, final String nurl, final String videoUrl, String playMin, final RelativeLayout adLayout, final String adRole, final String repeat, String ctaTitle) {
+    private void playPreRoleVideoAd(final Context context, final String nurl, final String videoUrl, String playMin, final RelativeLayout adLayout, final String adRole, final String repeat) {
 
         adLayout.setVisibility(View.GONE);
 
@@ -461,7 +461,7 @@ public class AdPlayAd {
     }
 
     @SuppressLint({"ResourceType", "ClickableViewAccessibility"})
-    private void playVideo(final Context context, final String nurl, final String videoUrl, String playMin, final RelativeLayout adLayout, final String adRole, final String repeat, String ctaTitle) {
+    private void playVideo(final Context context, final String nurl, final String videoUrl, String playMin, final RelativeLayout adLayout, final String adRole, final String repeat) {
 
         adLayout.setVisibility(View.GONE);
 
