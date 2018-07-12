@@ -260,6 +260,7 @@ public class AdPlayAd {
                 JSONObject seatBidObj = mainObject.getJSONObject("bid");
                 String nurl = seatBidObj.getString("nurl");
                 String videoUrl = seatBidObj.getString("video_url");
+                String text_cta = seatBidObj.getString("text_cta");
 
                 JSONObject objVideo = seatBidObj.getJSONObject("video");
                 String playMin = objVideo.getString("play_minutes");
@@ -268,9 +269,9 @@ public class AdPlayAd {
 
                 if (!nurl.equals(null) || !nurl.isEmpty() ) {
                     if (adRole.equalsIgnoreCase("1")){
-                        playPreRoleVideoAd(mContext, nurl, videoUrl, playMin, adLayout,adRole,repeat);
+                        playPreRoleVideoAd(mContext, nurl, videoUrl, playMin, adLayout,adRole,repeat,text_cta);
                     }else {
-                        playVideo(mContext, nurl, videoUrl, playMin, adLayout,adRole,repeat);
+                        playVideo(mContext, nurl, videoUrl, playMin, adLayout,adRole,repeat,text_cta);
                     }
                 }
 
@@ -281,12 +282,12 @@ public class AdPlayAd {
     }
 
     @SuppressLint({"ResourceType", "ClickableViewAccessibility"})
-    private void playPreRoleVideoAd(final Context context, final String nurl, final String videoUrl, String playMin, final RelativeLayout adLayout, final String adRole, final String repeat) {
+    private void playPreRoleVideoAd(final Context context, final String nurl, final String videoUrl, String playMin, final RelativeLayout adLayout, final String adRole, final String repeat, String text_cta) {
 
         adLayout.setVisibility(View.GONE);
 
         final Button btnCTA = new Button(context);
-        btnCTA.setText("Install");
+        btnCTA.setText(text_cta);
         btnCTA.setAllCaps(false);
         btnCTA.setTextSize(11);
         btnCTA.setBackgroundColor(Color.parseColor("#008000"));
@@ -486,7 +487,7 @@ public class AdPlayAd {
     }
 
     @SuppressLint({"ResourceType", "ClickableViewAccessibility"})
-    private void playVideo(final Context context, final String nurl, final String videoUrl, String playMin, final RelativeLayout adLayout, final String adRole, final String repeat) {
+    private void playVideo(final Context context, final String nurl, final String videoUrl, String playMin, final RelativeLayout adLayout, final String adRole, final String repeat, String text_cta) {
 
         adLayout.setVisibility(View.GONE);
 
