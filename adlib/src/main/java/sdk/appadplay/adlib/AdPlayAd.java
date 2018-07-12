@@ -405,6 +405,29 @@ public class AdPlayAd {
         adLayout.addView(subLayout, subLayoutParams);
 
 
+        btnCTA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    videoview.pause();
+                    videoview.stopPlayback();
+                    adLayout.setVisibility(View.GONE);
+                    videoview = null;
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    handler.removeCallbacks(myRunnable);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(nurl));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                } catch (ActivityNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         videoview.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
