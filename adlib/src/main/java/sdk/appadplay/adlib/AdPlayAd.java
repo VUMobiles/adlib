@@ -260,7 +260,6 @@ public class AdPlayAd {
                 JSONObject seatBidObj = mainObject.getJSONObject("bid");
                 String nurl = seatBidObj.getString("nurl");
                 String videoUrl = seatBidObj.getString("video_url");
-                String ctaTitle = seatBidObj.getString("");
 
                 JSONObject objVideo = seatBidObj.getJSONObject("video");
                 String playMin = objVideo.getString("play_minutes");
