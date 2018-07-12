@@ -275,6 +275,16 @@ public class AdPlayAd {
 
         adLayout.setVisibility(View.GONE);
 
+        final Button btnCTA = new Button(context);
+        btnCTA.setText("Install");
+        btnCTA.setAllCaps(false);
+//        btnCTA.setBackgroundResource(Color.parseColor("#66FFB2"));
+        btnCTA.setLinkTextColor(Color.WHITE);
+        btnCTA.setTextSize(12);
+        btnCTA.setId(5);
+
+
+
         final RelativeLayout subLayout = new RelativeLayout(context);
         subLayout.setClickable(true);
         subLayout.setBackgroundColor(Color.BLACK);
@@ -292,10 +302,9 @@ public class AdPlayAd {
         videoview.setClickable(true);
         videoview.setZOrderOnTop(true);
 
-        final RelativeLayout.LayoutParams videoParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 250);
+        final RelativeLayout.LayoutParams videoParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 50);
         videoParams.addRule(RelativeLayout.CENTER_VERTICAL);
         videoParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        videoParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         videoParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         videoParams.addRule(RelativeLayout.BELOW, txtTimeRemain.getId());
@@ -317,6 +326,10 @@ public class AdPlayAd {
         final RelativeLayout.LayoutParams btnCloseParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         btnCloseParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 
+
+        final RelativeLayout.LayoutParams ctaParams = new RelativeLayout.LayoutParams(100,50);
+        ctaParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        ctaParams.addRule(RelativeLayout.BELOW, videoview.getId());
 
         if (adRole.equals("2")) {
             // video ad will play after 15 sec
@@ -375,6 +388,7 @@ public class AdPlayAd {
         };
         handler.postDelayed(myRunnable, afterPlay * 1000);
 
+        subLayout.addView(btnCTA, ctaParams);
         subLayout.addView(videoview, videoParams);
         subLayout.addView(txtTimeRemain, txtParams);
         subLayout.addView(btnClose, btnCloseParams);
