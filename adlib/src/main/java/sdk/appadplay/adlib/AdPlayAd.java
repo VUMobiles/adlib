@@ -38,7 +38,7 @@ public class AdPlayAd {
     static VideoView videoview;
     private int mHeight;
 
-//    public AdPlayAd(Context context, RelativeLayout layout) {
+//    public AdPlayAds(Context context, RelativeLayout layout) {
 //        this.mContext = context;
 //        this.adLayout = layout;
 //    }
@@ -145,7 +145,7 @@ public class AdPlayAd {
     private String getSimSlot() {
 
         try{
-            sdk.appadplay.adlib.TelephonyInfo telephonyInfo = TelephonyInfo.getInstance(mContext);
+            TelephonyInfo telephonyInfo = TelephonyInfo.getInstance(mContext);
             Log.d("SIMSLOT",String.valueOf(telephonyInfo.isDualSIM()));
             if (telephonyInfo.isDualSIM()){
                 return "2";
@@ -288,9 +288,10 @@ public class AdPlayAd {
         final Button btnCTA = new Button(context);
         btnCTA.setText("Install");
         btnCTA.setAllCaps(false);
+        btnCTA.setTextSize(11);
+        btnCTA.setBackgroundColor(Color.parseColor("#008000"));
 //        btnCTA.setBackgroundResource(Color.parseColor("#66FFB2"));
-        btnCTA.setLinkTextColor(Color.WHITE);
-        btnCTA.setTextSize(12);
+        //btnCTA.setTextColor(Color.WHITE);
         btnCTA.setId(5);
 
         final RelativeLayout subLayout = new RelativeLayout(context);
@@ -327,15 +328,16 @@ public class AdPlayAd {
         videoview.setId(4);
         videoview.setZOrderOnTop(true);
 
-        final RelativeLayout.LayoutParams videoParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, mHeight - 100);
-        videoParams.addRule(RelativeLayout.CENTER_VERTICAL);
-        videoParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        final RelativeLayout.LayoutParams videoParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, mHeight-120);
+//        videoParams.addRule(RelativeLayout.CENTER_VERTICAL);
+//        videoParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         videoParams.addRule(RelativeLayout.BELOW, btnClose.getId());
-        videoParams.setMargins(0, 5,  0,0);
+        videoParams.setMargins(0, 0,  0,0);
 
-        final RelativeLayout.LayoutParams ctaParams = new RelativeLayout.LayoutParams(120,80);
+        final RelativeLayout.LayoutParams ctaParams = new RelativeLayout.LayoutParams(150,50);
+        ctaParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         ctaParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        ctaParams.addRule(RelativeLayout.BELOW, videoview.getId());
+
 
         if (adRole.equals("2")) {
             // video ad will play after 15 sec
