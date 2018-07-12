@@ -327,13 +327,13 @@ public class AdPlayAd {
         videoview.setId(4);
         videoview.setZOrderOnTop(true);
 
-        final RelativeLayout.LayoutParams videoParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, mHeight);
+        final RelativeLayout.LayoutParams videoParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, mHeight - 70);
         videoParams.addRule(RelativeLayout.CENTER_VERTICAL);
         videoParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         videoParams.addRule(RelativeLayout.BELOW, btnClose.getId());
         videoParams.setMargins(0, 5,  0,0);
 
-        final RelativeLayout.LayoutParams ctaParams = new RelativeLayout.LayoutParams(100,50);
+        final RelativeLayout.LayoutParams ctaParams = new RelativeLayout.LayoutParams(120,80);
         ctaParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         ctaParams.addRule(RelativeLayout.BELOW, videoview.getId());
 
