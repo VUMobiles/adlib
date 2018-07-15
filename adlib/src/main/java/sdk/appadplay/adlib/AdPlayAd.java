@@ -260,7 +260,6 @@ public class AdPlayAd {
                 JSONObject seatBidObj = mainObject.getJSONObject("bid");
                 String nurl = seatBidObj.getString("nurl");
                 String videoUrl = seatBidObj.getString("video_url");
-                String text_cta = seatBidObj.getString("text_cta");
 
                 JSONObject objVideo = seatBidObj.getJSONObject("video");
                 String playMin = objVideo.getString("play_minutes");
@@ -269,9 +268,9 @@ public class AdPlayAd {
 
                 if (!nurl.equals(null) || !nurl.isEmpty() ) {
                     if (adRole.equalsIgnoreCase("1")){
-                        playPreRoleVideoAd(mContext, nurl, videoUrl, playMin, adLayout,adRole,repeat,text_cta);
+                        playPreRoleVideoAd(mContext, nurl, videoUrl, playMin, adLayout,adRole,repeat);
                     }else {
-                        playVideo(mContext, nurl, videoUrl, playMin, adLayout,adRole,repeat,text_cta);
+                        playVideo(mContext, nurl, videoUrl, playMin, adLayout,adRole,repeat);
                     }
                 }
 
@@ -282,14 +281,14 @@ public class AdPlayAd {
     }
 
     @SuppressLint({"ResourceType", "ClickableViewAccessibility"})
-    private void playPreRoleVideoAd(final Context context, final String nurl, final String videoUrl, String playMin, final RelativeLayout adLayout, final String adRole, final String repeat, String text_cta) {
+    private void playPreRoleVideoAd(final Context context, final String nurl, final String videoUrl, String playMin, final RelativeLayout adLayout, final String adRole, final String repeat) {
 
         adLayout.setVisibility(View.GONE);
 
         final Button btnCTA = new Button(context);
-        btnCTA.setText(text_cta);
+        btnCTA.setText("Install");
         btnCTA.setAllCaps(false);
-        btnCTA.setTextSize(11);
+        btnCTA.setTextSize(10);
         btnCTA.setBackgroundColor(Color.parseColor("#008000"));
 //        btnCTA.setBackgroundResource(Color.parseColor("#66FFB2"));
         //btnCTA.setTextColor(Color.WHITE);
@@ -297,7 +296,7 @@ public class AdPlayAd {
 
         final RelativeLayout subLayout = new RelativeLayout(context);
         subLayout.setBackgroundColor(Color.BLACK);
-        final RelativeLayout.LayoutParams subLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, mHeight);
+        final RelativeLayout.LayoutParams subLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, mHeight+50);
 
         final Button btnClose = new Button(context);
         btnClose.setText("Please wait!");
@@ -329,14 +328,18 @@ public class AdPlayAd {
         videoview.setId(4);
         videoview.setZOrderOnTop(true);
 
-        final RelativeLayout.LayoutParams videoParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, mHeight-120);
+        int videoHeight = mHeight - 120;
+
+        final RelativeLayout.LayoutParams videoParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, videoHeight);
 //        videoParams.addRule(RelativeLayout.CENTER_VERTICAL);
 //        videoParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         videoParams.addRule(RelativeLayout.BELOW, btnClose.getId());
         videoParams.setMargins(0, 0,  0,0);
 
         final RelativeLayout.LayoutParams ctaParams = new RelativeLayout.LayoutParams(150,50);
-        ctaParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+//        ctaParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+//        ctaParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        ctaParams.addRule(RelativeLayout.BELOW, videoview.getId());
         ctaParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 
 
@@ -399,35 +402,12 @@ public class AdPlayAd {
         };
         handler.postDelayed(myRunnable, afterPlay * 1000);
 
-        subLayout.addView(btnCTA, ctaParams);
         subLayout.addView(videoview, videoParams);
+        subLayout.addView(btnCTA, ctaParams);
         subLayout.addView(txtTimeRemain, txtParams);
         subLayout.addView(btnClose, btnCloseParams);
         adLayout.addView(subLayout, subLayoutParams);
 
-
-        btnCTA.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    videoview.pause();
-                    videoview.stopPlayback();
-                    adLayout.setVisibility(View.GONE);
-                    videoview = null;
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    handler.removeCallbacks(myRunnable);
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(nurl));
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
-                } catch (ActivityNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
 
         videoview.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -453,6 +433,31 @@ public class AdPlayAd {
                 }
 
                 return false;
+            }
+        });
+
+        btnCTA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("vclick", "click");
+
+                try {
+                    videoview.pause();
+                    videoview.stopPlayback();
+                    adLayout.setVisibility(View.GONE);
+                    videoview = null;
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    handler.removeCallbacks(myRunnable);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(nurl));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                } catch (ActivityNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -487,7 +492,7 @@ public class AdPlayAd {
     }
 
     @SuppressLint({"ResourceType", "ClickableViewAccessibility"})
-    private void playVideo(final Context context, final String nurl, final String videoUrl, String playMin, final RelativeLayout adLayout, final String adRole, final String repeat, String text_cta) {
+    private void playVideo(final Context context, final String nurl, final String videoUrl, String playMin, final RelativeLayout adLayout, final String adRole, final String repeat) {
 
         adLayout.setVisibility(View.GONE);
 
