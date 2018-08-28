@@ -15,13 +15,24 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import sdk.appadplay.adlib.TelephonyInfo;
 import sdk.appadplay.adlib.network.HttpHandler;
@@ -462,4 +473,247 @@ public class AdPlayAd {
     }
 
     //*******************************END of video ad Method*****************************//
+
+    public void Banner(final String publisherID, final String packageName, final String requestType,final String dimension) {
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                String UserAgent = (new WebView(mContext)).getSettings().getUserAgentString();
+                String userAgent = UserAgent.replaceAll(" ", "%20");
+                String gID = getDeviceID();
+                Log.d("DeviceId", gID);
+                String url = "https://adsapi.adplay-mobile.com/adplaysdk?pid=" + publisherID + "&useragent=" +
+                        userAgent + "&type=" + requestType + "&dimension="+dimension+"&gid=" + gID + "&packagename=" +
+                        packageName + "&request=banner";
+                Log.d("Banner", url);
+//                new BannerBackgroundTask().execute(url);
+                new BackgroundBannerTask().execute(url);
+            }
+        }, 1000);
+
+    }
+
+    private class BackgroundBannerTask extends AsyncTask<String,Void,String>{
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            String url = strings[0];
+
+            return getJSON(url,3000);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            try {
+                JSONObject response = new JSONObject(s);
+                JSONObject obj = response.getJSONObject("seatbid");
+                JSONObject objBit = obj.getJSONObject("bid");
+                String dim = response.getString("dim");
+                String bannerImage = objBit.getString("iurl");
+                String clickUrl = objBit.getString("nurl");
+                String logoV = objBit.getString("logo");
+                String logoClick = objBit.getString("logo_click");
+                try {
+                    loadBannerAd(bannerImage,clickUrl,clickUrl,dim,logoV,logoClick);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    public String getJSON(String url, int timeout) {
+        HttpURLConnection c = null;
+        try {
+            URL u = new URL(url);
+            c = (HttpURLConnection) u.openConnection();
+            c.setRequestMethod("GET");
+            c.setRequestProperty("Content-length", "0");
+            c.setUseCaches(false);
+            c.setAllowUserInteraction(false);
+            c.setConnectTimeout(timeout);
+            c.setReadTimeout(timeout);
+            c.connect();
+            int status = c.getResponseCode();
+
+            switch (status) {
+                case 200:
+                case 201:
+                    BufferedReader br = new BufferedReader(new InputStreamReader(c.getInputStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line+"\n");
+                    }
+                    br.close();
+                    return sb.toString();
+            }
+
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (c != null) {
+                try {
+                    c.disconnect();
+                } catch (Exception ex) {
+                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return null;
+    }
+
+    private void loadBannerAd(String adUrl, final String clickUrl, final String logoClickUrl, String dimen, String logoV, final String logoClick) throws IOException {
+
+        Log.d("Banner","adurl:-"+adUrl);
+
+        adLayout.setVisibility(View.VISIBLE);
+
+        try {
+            String[] parts = dimen.split("x");
+            int width = Integer.parseInt(parts[0].replace("D", ""));
+            int height = Integer.parseInt(parts[1]);
+            final float scale = mContext.getResources().getDisplayMetrics().density;
+            int WidthPixels = (int) (width * scale + 0.5f);
+            int HeightPixels = (int) (height * scale + 0.5f);
+
+
+            RelativeLayout subLayout = new RelativeLayout(mContext);
+            RelativeLayout.LayoutParams subParams = new RelativeLayout.LayoutParams(WidthPixels, HeightPixels);
+            subLayout.setLayoutParams(subParams);
+
+            WebView logoView = new WebView(mContext);
+            logoView.setBackgroundColor(Color.parseColor("#00000000"));
+            RelativeLayout.LayoutParams logoParams = new RelativeLayout.LayoutParams(25, 25);
+            logoParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            logoView.setLayoutParams(logoParams);
+
+            ImageView imgClose = new ImageView(mContext);
+            imgClose.setImageResource(sdk.appadplay.adlib.R.drawable.btnclose);
+            logoView.setBackgroundColor(Color.parseColor("#00000000"));
+            RelativeLayout.LayoutParams closeParams = new RelativeLayout.LayoutParams(25, 25);
+            closeParams.addRule(RelativeLayout.ALIGN_PARENT_TOP|RelativeLayout.ALIGN_PARENT_RIGHT);
+            imgClose.setLayoutParams(closeParams);
+
+
+            WebView mWebView = new WebView(mContext);
+            RelativeLayout.LayoutParams adParams = new RelativeLayout.LayoutParams(WidthPixels, HeightPixels);
+            mWebView.setLayoutParams(adParams);
+
+            mWebView.getSettings().setJavaScriptEnabled(true);
+
+            mWebView.setWebViewClient(new WebViewClient() {
+                @Override
+                public void onPageFinished(WebView web, String url) {
+                    web.loadUrl("javascript:(function(){ document.body.style.margin = '0px'})();");
+                }
+            });
+
+
+            logoView.getSettings().setJavaScriptEnabled(true);
+            //logoView.loadUrl(logoUrl);
+
+            mWebView.loadUrl(adUrl);
+            logoView.loadUrl(logoV);
+
+            subLayout.addView(mWebView);
+            subLayout.addView(logoView);
+            subLayout.addView(imgClose);
+            adLayout.addView(subLayout);
+
+            imgClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    adLayout.setVisibility(View.GONE);
+                }
+            });
+
+            logoView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+
+                    Log.d("AdClickEvent", "Click on logo");
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(logoClick));
+                    mContext.startActivity(browserIntent);
+
+                    return true;
+                }
+            });
+
+            mWebView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+
+
+                    Log.d("AdClickEvent", "Click on ad");
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(clickUrl));
+                    mContext.startActivity(browserIntent);
+
+                    return true;
+                }
+            });
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+//        adLayout.setVisibility(View.VISIBLE);
+//
+//        String[] parts = dimen.split("x");
+//        int width = Integer.parseInt(parts[0].replace("D",""));
+//        int height = Integer.parseInt(parts[1]);
+//        final float scale = mContext.getResources().getDisplayMetrics().density;
+//        int WidthPixels = (int) (width * scale + 0.5f);
+//        int HeightPixels = (int) (height * scale + 0.5f);
+//
+//        RelativeLayout.LayoutParams layout = new RelativeLayout.LayoutParams(WidthPixels,HeightPixels);
+//        adLayout.setLayoutParams(layout);
+//
+//
+//        WebView mWebView = new WebView(mContext);
+//        RelativeLayout.LayoutParams adParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+//
+//        WebView logoViewBottom = new WebView(mContext);
+//        RelativeLayout.LayoutParams logoParams = new RelativeLayout.LayoutParams(22, 20);
+//        logoParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+//
+//
+//
+//
+//        logoViewBottom.loadUrl(logoUrl);
+//        mWebView.loadUrl(adUrl);
+//
+//        adLayout.addView(mWebView,adParams);
+//        adLayout.addView(logoViewBottom,logoParams);
+//
+//        mWebView.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//
+//
+//                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(clickUrl));
+//                mContext.startActivity(browserIntent);
+//
+//                return true;
+//            }
+//        });
+//
+//        logoViewBottom.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//
+//                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(logoClickUrl));
+//                mContext.startActivity(browserIntent);
+//
+//                return true;
+//            }
+//        });
+
+    }
 }
