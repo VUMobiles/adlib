@@ -193,7 +193,7 @@ public class AdPlayAd {
 
     //==============================Video Ad==================================//
 
-    public void loadVideoAd(final String myPublisherId,VideoAdCallBack videoAdCallBack) {
+    public void loadVideoAd(final String myPublisherId, VideoAdCallBack videoAdCallBack) {
 
         this.videoAdCallBackStart = videoAdCallBack;
 
@@ -283,11 +283,11 @@ public class AdPlayAd {
                 String adRole = objVideo.getString("role");
                 String repeat = objVideo.getString("repeat");
 
-                if (!nurl.equals(null) || !nurl.isEmpty() ) {
-                    if (adRole.equalsIgnoreCase("1")){
-                        playPreRoleVideoAd(mContext, nurl, videoUrl, playMin, adLayout,adRole,repeat);
-                    }else {
-                        playVideo(mContext, nurl, videoUrl, playMin, adLayout,adRole,repeat);
+                if (!nurl.equals(null) || !nurl.isEmpty()) {
+                    if (adRole.equalsIgnoreCase("1")) {
+                        playPreRoleVideoAd(mContext, nurl, videoUrl, playMin, adLayout, adRole, repeat);
+                    } else {
+                        playVideo(mContext, nurl, videoUrl, playMin, adLayout, adRole, repeat);
                     }
                 }
 
@@ -302,10 +302,11 @@ public class AdPlayAd {
 
         adLayout.setVisibility(View.GONE);
 
-        final Button btnCTA = new Button(context);
+        final TextView btnCTA = new TextView(context);
         btnCTA.setText("Install");
         btnCTA.setAllCaps(false);
-        btnCTA.setTextSize(10);
+        btnCTA.setGravity(Gravity.CENTER);
+        btnCTA.setTextSize(14);
         btnCTA.setBackgroundColor(Color.parseColor("#008000"));
 //        btnCTA.setBackgroundResource(Color.parseColor("#66FFB2"));
         //btnCTA.setTextColor(Color.WHITE);
@@ -313,7 +314,7 @@ public class AdPlayAd {
 
         final RelativeLayout subLayout = new RelativeLayout(context);
         subLayout.setBackgroundColor(Color.BLACK);
-        final RelativeLayout.LayoutParams subLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, mHeight+50);
+        final RelativeLayout.LayoutParams subLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, mHeight);
 
         final Button btnClose = new Button(context);
         btnClose.setText("Please wait!");
@@ -345,19 +346,19 @@ public class AdPlayAd {
         videoview.setId(4);
         videoview.setZOrderOnTop(true);
 
-        int videoHeight = mHeight - 120;
-
-        final RelativeLayout.LayoutParams videoParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, videoHeight);
+        final RelativeLayout.LayoutParams videoParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, mHeight);
 //        videoParams.addRule(RelativeLayout.CENTER_VERTICAL);
 //        videoParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         videoParams.addRule(RelativeLayout.BELOW, btnClose.getId());
-        videoParams.setMargins(0, 0,  0,0);
+        videoParams.setMargins(0, 0, 0, 0);
 
-        final RelativeLayout.LayoutParams ctaParams = new RelativeLayout.LayoutParams(150,50);
-//        ctaParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-//        ctaParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        ctaParams.addRule(RelativeLayout.BELOW, videoview.getId());
+        final RelativeLayout.LayoutParams ctaParams = new RelativeLayout.LayoutParams(170, 60);
+        //ctaParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        ctaParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
         ctaParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        ctaParams.addRule(RelativeLayout.BELOW, videoview.getId());
+        ctaParams.setMargins(5, 5, 5, 5);
+        // ctaParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 
 
         if (adRole.equals("2")) {
@@ -397,7 +398,7 @@ public class AdPlayAd {
                                         double remian = millisUntilFinished / 1000;
                                         int remainTime = (int) remian;
                                         String s = String.valueOf(remainTime);
-                                        btnClose.setText("Advertisement "+s);
+                                        btnClose.setText("Advertisement " + s);
                                         Log.d("RemainTime", s);
                                     }
 
@@ -419,11 +420,11 @@ public class AdPlayAd {
         };
         handler.postDelayed(myRunnable, afterPlay * 1000);
 
-        subLayout.addView(videoview, videoParams);
-        subLayout.addView(btnCTA, ctaParams);
-        subLayout.addView(txtTimeRemain, txtParams);
-        subLayout.addView(btnClose, btnCloseParams);
-        adLayout.addView(subLayout, subLayoutParams);
+        adLayout.addView(btnCTA, ctaParams);
+        adLayout.addView(videoview, videoParams);
+        adLayout.addView(txtTimeRemain, txtParams);
+        adLayout.addView(btnClose, btnCloseParams);
+        //adLayout.addView(subLayout, subLayoutParams);
 
 
         videoview.setOnTouchListener(new View.OnTouchListener() {
@@ -459,10 +460,15 @@ public class AdPlayAd {
                 Log.d("vclick", "click");
 
                 try {
-                    videoview.pause();
-                    videoview.stopPlayback();
-                    adLayout.setVisibility(View.GONE);
-                    videoview = null;
+                    if (videoview.isPlaying()) {
+                        videoview.stopPlayback();
+                        adLayout.setVisibility(View.GONE);
+                        handler.removeCallbacks(myRunnable);
+                        videoview.setVisibility(View.GONE);
+                        if (videoAdCallBackStart != null) {
+                            videoAdCallBackStart.tapInstallButton(true);
+                        }
+                    }
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
@@ -541,19 +547,19 @@ public class AdPlayAd {
         btnClose.setBackgroundResource(Color.parseColor("#00000000"));
         btnClose.setId(2);
 
-        final RelativeLayout.LayoutParams txtParams = new RelativeLayout.LayoutParams(25,25);
-        txtParams.addRule(RelativeLayout.BELOW,videoview.getId());
+        final RelativeLayout.LayoutParams txtParams = new RelativeLayout.LayoutParams(25, 25);
+        txtParams.addRule(RelativeLayout.BELOW, videoview.getId());
         txtParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        txtParams.setMargins(0, 0, 10,10);
+        txtParams.setMargins(0, 0, 10, 10);
 
         final RelativeLayout.LayoutParams btnCloseParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         btnCloseParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 
 
-        if (adRole.equals("2")){
+        if (adRole.equals("2")) {
             // video ad will play after 15 sec
             time = 15000;
-        }else {
+        } else {
             // video ad will play after 1 sec
             time = 1000;
         }
@@ -569,25 +575,25 @@ public class AdPlayAd {
 
                 //videoview.requestFocus();
 
-                if (videoAdCallBackStart!=null){
+                if (videoAdCallBackStart != null) {
                     videoAdCallBackStart.isPlayingVideoAD(true);
                 }
                 videoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                     @Override
                     public void onPrepared(MediaPlayer mediaPlayer) {
-                        try{
-                            Log.d("VideoAd","Prepare");
+                        try {
+                            Log.d("VideoAd", "Prepare");
                             videoview.start();
-                            Log.d("VideoAd","Start");
-                            if (videoview.isPlaying()){
-                                Log.d("VideoAd","Playing");
+                            Log.d("VideoAd", "Start");
+                            if (videoview.isPlaying()) {
+                                Log.d("VideoAd", "Playing");
                                 new CountDownTimer(5000, 1000) {
                                     public void onTick(long millisUntilFinished) {
                                         double remian = millisUntilFinished / 1000;
                                         int remainTime = (int) remian;
                                         String s = String.valueOf(remainTime);
                                         txtTimeRemain.setText(s);
-                                        Log.d("RemainTime",s);
+                                        Log.d("RemainTime", s);
                                     }
 
                                     public void onFinish() {
@@ -598,7 +604,7 @@ public class AdPlayAd {
                                 }.start();
 
                             }
-                        }catch (NullPointerException e){
+                        } catch (NullPointerException e) {
                             e.printStackTrace();
                         }
                     }
@@ -607,7 +613,7 @@ public class AdPlayAd {
         };
         handler.postDelayed(myRunnable, afterPlay * 1000);
 
-        subLayout.addView(txtTimeRemain,txtParams);
+        subLayout.addView(txtTimeRemain, txtParams);
         subLayout.addView(btnClose, btnCloseParams);
         subLayout.addView(videoview, videoParams);
         adLayout.addView(subLayout, subLayoutParams);
@@ -618,13 +624,13 @@ public class AdPlayAd {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 Log.d("vclick", "click");
 
-                try{
+                try {
                     videoview.pause();
                     videoview.stopPlayback();
                     adLayout.setVisibility(View.GONE);
                     videoview = null;
                     videoview.setVisibility(View.GONE);
-                }catch (NullPointerException e){
+                } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
 
@@ -649,7 +655,7 @@ public class AdPlayAd {
                     videoview.setVisibility(View.GONE);
                     adLayout.setVisibility(View.GONE);
                     handler.removeCallbacks(myRunnable);
-                    if (videoAdCallBackStart!=null){
+                    if (videoAdCallBackStart != null) {
                         videoAdCallBackStart.skipVideoAd(true);
                     }
                 }
@@ -661,20 +667,25 @@ public class AdPlayAd {
             public void onCompletion(MediaPlayer mediaPlayer) {
                 adLayout.setVisibility(View.GONE);
                 videoview.setVisibility(View.GONE);
-                Log.d("VideoAd","Finish");
+                Log.d("VideoAd", "Finish");
                 handler.removeCallbacks(myRunnable);
-                if (videoAdCallBackStart!=null){
+                if (videoAdCallBackStart != null) {
                     videoAdCallBackStart.finishVideoAd(true);
                 }
             }
         });
     }
+
     VideoAdCallBack videoAdCallBackStart;
 
-    public interface VideoAdCallBack{
+    public interface VideoAdCallBack {
         public void isPlayingVideoAD(boolean isPlaying);
+
         public void finishVideoAd(boolean finishAd);
+
         public void skipVideoAd(boolean skipAd);
+
+        void tapInstallButton(boolean tapInstall);
     }
 
     //*******************************END of video ad Method*****************************//
