@@ -542,7 +542,7 @@ public class AdPlayAd {
 
 
         final Button btnClose = new Button(context);
-        btnClose.setText("SKIP AD");
+//        btnClose.setText("SKIP AD");
         btnClose.setTextColor(Color.WHITE);
         btnClose.setBackgroundResource(Color.parseColor("#00000000"));
         btnClose.setId(2);
@@ -571,7 +571,6 @@ public class AdPlayAd {
             public void run() {
                 adLayout.setVisibility(View.VISIBLE);
                 adLayout.setBackgroundColor(Color.BLACK);
-                btnClose.setVisibility(View.GONE);
 
                 //videoview.requestFocus();
 
@@ -592,12 +591,14 @@ public class AdPlayAd {
                                         double remian = millisUntilFinished / 1000;
                                         int remainTime = (int) remian;
                                         String s = String.valueOf(remainTime);
-                                        txtTimeRemain.setText(s);
+                                        btnClose.setText(s);
+//                                        txtTimeRemain.setText(s);
                                         Log.d("RemainTime", s);
                                     }
 
                                     public void onFinish() {
                                         btnClose.setVisibility(View.VISIBLE);
+                                        btnClose.setText("SKIP AD");
                                         txtTimeRemain.setVisibility(View.GONE);
                                     }
 

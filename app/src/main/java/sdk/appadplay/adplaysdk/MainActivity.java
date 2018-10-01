@@ -46,26 +46,29 @@ public class MainActivity extends AppCompatActivity {
 //        String d = getJSON("http://android.vumobile.biz/bdnewapi/DataOther/Slidder",3000);
 //        Log.d("Banner", d);
 
-//        new AdPlayAd(this, adView).loadVideoAd(myPublisherId, new AdPlayAd.VideoAdCallBack() {
-//            @Override
-//            public void isPlayingVideoAD(boolean isPlaying) {
-//                if (isPlaying){
-////                    videoView.pause();
-//                }
-//            }
-//
-//            @Override
-//            public void finishVideoAd(boolean finishAd) {
-//
-//            }
-//
-//            @Override
-//            public void skipVideoAd(boolean skipAd) {
-//
-//            }
-//        });
+        new AdPlayAd(this, adView).loadVideoAd(myPublisherId, new AdPlayAd.VideoAdCallBack() {
+            @Override
+            public void isPlayingVideoAD(boolean isPlaying) {
 
-        new AdPlayAd(this,adView).Banner("59c1fbdb85203","sdk.appadplay.adplaysdk","banner","300x50");
+            }
+
+            @Override
+            public void finishVideoAd(boolean finishAd) {
+
+            }
+
+            @Override
+            public void skipVideoAd(boolean skipAd) {
+
+            }
+
+            @Override
+            public void tapInstallButton(boolean tapInstall) {
+
+            }
+        });
+
+//        new AdPlayAd(this,adView).Banner("59c1fbdb85203","sdk.appadplay.adplaysdk","banner","300x50");
     }
 
 //    private void playVideo() {
