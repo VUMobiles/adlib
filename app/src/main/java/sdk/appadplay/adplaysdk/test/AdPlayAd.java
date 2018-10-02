@@ -284,7 +284,7 @@ public class AdPlayAd {
                 String playMin = objVideo.getString("play_minutes");
                 String adRole = objVideo.getString("role");
                 String repeat = objVideo.getString("repeat");
-
+                Log.d("AdplayAd",adRole);
                 if (!nurl.equals(null) || !nurl.isEmpty()) {
                     if (adRole.equalsIgnoreCase("1")) {
                         playPreRoleVideoAd(mContext, nurl, videoUrl, playMin, adLayout, adRole, repeat);
