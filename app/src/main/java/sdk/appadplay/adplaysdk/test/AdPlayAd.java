@@ -549,8 +549,8 @@ public class AdPlayAd {
         btnClose.setBackgroundResource(Color.parseColor("#00000000"));
         btnClose.setId(2);
 
-        final RelativeLayout.LayoutParams txtParams = new RelativeLayout.LayoutParams(25, 25);
-        txtParams.addRule(RelativeLayout.BELOW, videoview.getId());
+        final RelativeLayout.LayoutParams txtParams = new RelativeLayout.LayoutParams(20, 20);
+        //txtParams.addRule(RelativeLayout.BELOW, videoview.getId());
         txtParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         txtParams.setMargins(0, 0, 10, 10);
 

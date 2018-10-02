@@ -583,6 +583,7 @@ public class AdPlayAd {
                         try {
                             Log.d("VideoAd", "Prepare");
                             videoview.start();
+                            btnClose.setVisibility(View.VISIBLE);
                             Log.d("VideoAd", "Start");
                             if (videoview.isPlaying()) {
                                 Log.d("VideoAd", "Playing");
@@ -614,7 +615,7 @@ public class AdPlayAd {
         };
         handler.postDelayed(myRunnable, afterPlay * 1000);
 
-        subLayout.addView(txtTimeRemain, txtParams);
+//        subLayout.addView(txtTimeRemain, txtParams);
         subLayout.addView(btnClose, btnCloseParams);
         subLayout.addView(videoview, videoParams);
         adLayout.addView(subLayout, subLayoutParams);
