@@ -19,7 +19,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
@@ -520,10 +519,6 @@ public class AdPlayAd {
 
         adLayout.setVisibility(View.GONE);
 
-        LinearLayout parent = new LinearLayout(context);
-        parent.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        parent.setOrientation(LinearLayout.VERTICAL);
-
         final RelativeLayout subLayout = new RelativeLayout(context);
         final RelativeLayout.LayoutParams subLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
 
@@ -620,14 +615,11 @@ public class AdPlayAd {
         };
         handler.postDelayed(myRunnable, afterPlay * 1000);
 
-        parent.addView(btnClose);
-        parent.addView(txtTimeRemain);
-        parent.addView(videoview);
-        adLayout.addView(parent);
-//        subLayout.addView(txtTimeRemain, txtParams);
-//        subLayout.addView(btnClose, btnCloseParams);
-//        subLayout.addView(videoview, videoParams);
-//        adLayout.addView(subLayout, subLayoutParams);
+
+        subLayout.addView(txtTimeRemain, txtParams);
+        subLayout.addView(btnClose, btnCloseParams);
+        subLayout.addView(videoview, videoParams);
+        adLayout.addView(subLayout, subLayoutParams);
 
 
         videoview.setOnTouchListener(new View.OnTouchListener() {
